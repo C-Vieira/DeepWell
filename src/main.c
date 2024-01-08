@@ -9,8 +9,7 @@ Tile** map;
 int floorCount = 0;
 Position exit_pos;
 bool defeatedFinalBoss = false;
-
-//TEST COMMIT
+TileList* neighbors = NULL;
 
 int main(void){
 

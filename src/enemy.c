@@ -58,7 +58,6 @@ int pickEnemyColorFromType(int type) {
         return COLOR_PAIR(YELLOW_BLACK);
         break;
     case CORPSE:
-    case LIVING_FLESH:
     case CTHULHU:
         return COLOR_PAIR(RED_BLACK);
         break;
@@ -69,6 +68,7 @@ int pickEnemyColorFromType(int type) {
     case DAGON:
         return COLOR_PAIR(CYAN_BLACK);
         break;
+    case LIVING_FLESH:
     case COSMIC_HORROR:
         return COLOR_PAIR(MAGENTA_BLACK);
         break;
@@ -167,86 +167,11 @@ Entity* checkForTarget(Position target_pos){
     return NULL; //no target found
 }
 
-//move an enemy entity randomly in four directions
-void moveRandom(Entity* enemy){
-    if(enemy->immobile) return;
-
-    Position newPos = {enemy->pos.y, enemy->pos.x};
-
-    int randDir = rand() % 4;
-    switch(randDir){
-    case 0:
-        newPos.y--; //up
-        break;
-    case 1:
-        newPos.x--; //left
-        break;
-    case 2:
-        newPos.y++; //down
-        break;
-    case 3:
-        newPos.x++; //right
-        break;
-    default:
-        break;
-    }
-
-    if(map[newPos.y][newPos.x].walkable){
-        if((newPos.y == player->pos.y) && (newPos.x == player->pos.x)) //attack player, don't move
-            attackEntity(player, enemy);
-        else{
-            enemy->pos.y = newPos.y;
-            enemy->pos.x = newPos.x;
-        }
-    }
-}
-
-//move an enemy in the direction of a given target
-void followTarget(Entity* enemy, Entity* target){
-    if(enemy->immobile) return;
-
-    Position newPos = {enemy->pos.y, enemy->pos.x};
-    int radius = 10;
-
-    /*This produces very janky results...
-    Enemies do find their way towards their target, but end up preferring to move right/left and avoid up/down whenever possible,
-    resulting in a "crab-like" strafing pattern and sometimes getting stuck.
-    Should probably swap this out for a better pathfinding algorithm..
-    */
-
-    if((abs(enemy->pos.y - target->pos.y) < radius) && (abs(enemy->pos.x - target->pos.x) < radius)){ //only follow if within radius
-        enemy->color = pickEnemyColorFromType(enemy->type);
-        enemy->seen = true;
-        if(abs((enemy->pos.x - 1) - target->pos.x) < abs(enemy->pos.x - target->pos.x) && map[enemy->pos.y][enemy->pos.x - 1].walkable) //step left
-            newPos.x--;
-        else if(abs((enemy->pos.x + 1) - target->pos.x) < abs(enemy->pos.x - target->pos.x) && map[enemy->pos.y][enemy->pos.x + 1].walkable) //step right
-            newPos.x++;
-        else if(abs((enemy->pos.y - 1) - target->pos.y) < abs(enemy->pos.y - target->pos.y) && map[enemy->pos.y - 1][enemy->pos.x].walkable) //step up
-            newPos.y--;
-        else if(abs((enemy->pos.y + 1) - target->pos.y) < abs(enemy->pos.y - target->pos.y) && map[enemy->pos.y + 1][enemy->pos.x].walkable) //step left
-            newPos.y++;
-
-        if((newPos.y == player->pos.y) && (newPos.x == player->pos.x)) //attack player, don't move
-            attackEntity(player, enemy);
-        else if(checkForTarget(newPos) == NULL){ //enemies body block each other
-            enemy->pos.y = newPos.y;
-            enemy->pos.x = newPos.x;
-        }
-    }else{
-        if(enemy->seen){ //move at random otherwise
-            enemy->color = COLOR_PAIR(SEEN_COLOR);
-            moveRandom(enemy);
-        }else{
-            enemy->color = COLOR_PAIR(BLACK_BLACK);
-            moveRandom(enemy);
-        }
-    }
-}
-
 void moveEnemies(void){
     EntityList* p = enemies;
     while(p != NULL){
-        followTarget(p->entity, player); //move all enemies
+        //followTarget(p->entity, player); //move all enemies
+        seekTarget(p->entity, player);
         p = p->next;
     }
 }

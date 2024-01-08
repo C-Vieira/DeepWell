@@ -92,7 +92,7 @@ void scanNearbyEntities(void) {
     attroff(COLOR_PAIR(VISIBLE_COLOR));
     EntityList* p = enemies;
     while (p != NULL) {
-        if (abs(p->entity->pos.y - player->pos.y) && abs(p->entity->pos.x - player->pos.x) < radius) {
+        if (getDistance(p->entity->pos, player->pos) < radius && lineOfSight(p->entity->pos, player->pos)){
             mvaddch(++y, 5, p->entity->ch | p->entity->color);
             mvprintw(y, 6, ": %s                                ", p->entity->name);
         }

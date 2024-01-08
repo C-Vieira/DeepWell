@@ -7,6 +7,8 @@
 #include <stdbool.h>
 #include <math.h>
 
+#define INT_MAX 2147483647
+
 //color pairs
 #define VISIBLE_COLOR 1
 #define SEEN_COLOR 2
@@ -55,6 +57,11 @@ bool visible;
 bool seen;
 }Tile;
 
+typedef struct TileList {
+Position tilePos;
+struct TileList* next;
+}TileList;
+
 typedef struct{
 Position pos;
 int type;
@@ -101,8 +108,6 @@ void attackEntity(Entity* target, Entity* attacker);
 void spawnCorpse(Entity* entity);
 Entity* createEnemy(Position pos, int type, char* name, char symbol, int color, int health, int damage, int defense, bool isImmobile, int xpAmount);
 Entity* checkForTarget(Position target_pos);
-void moveRandom(Entity* enemy);
-void followTarget(Entity* enemy, Entity* target);
 void moveEnemies(void);
 
 //engine.c functions
@@ -122,6 +127,15 @@ Position setupStartRoom(void);
 Position setupFinalArena(void);
 void freeMap(void);
 void resetMap(void);
+
+//pathing functions
+void moveRandom(Entity* enemy);
+void followTarget(Entity* enemy, Entity* target);
+void seekTarget(Entity* enemy, Entity* target);
+void addTile(Position tilePos);
+void clearAllTiles(void);
+void removeTile(Position target);
+Position getLowestCostFromNeighbors(Position start, Position goal);
 
 //player.c functions
 Entity* createPlayer(Position start_pos);
@@ -154,6 +168,7 @@ extern const int MAP_WIDTH;
 extern Entity* player;
 extern Tile** map;
 extern EntityList* enemies; //global enemy list
+extern TileList* neighbors;
 extern int floorCount;
 extern Position exit_pos;
 extern bool defeatedFinalBoss;
