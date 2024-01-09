@@ -55,6 +55,9 @@ void gameLoop(void){
             resetMap();
             showFloorMessage();
         }
+        else if (map[player->pos.y][player->pos.x].ch == '_') { //over an altar
+            applyAltarEffect();
+        }
 
         if(player->xpAmount >= player->amountForNextLevel) levelUP();
 

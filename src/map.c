@@ -12,6 +12,7 @@ Tile** createMapTiles(void){
             tiles[y][x].transparent = false;
             tiles[y][x].visible = false;
             tiles[y][x].seen = false;
+            tiles[y][x].attr = A_NORMAL;
         }
     }
 
@@ -47,6 +48,9 @@ Position setupMap(void){
     addExit(rooms[n_rooms - 1]);
     exit_pos.y = rooms[n_rooms - 1].center.y;
     exit_pos.x = rooms[n_rooms - 1].center.x;
+
+    if(floorCount%2 == 0) //only on even floors
+        addAltar(rooms[(int)(n_rooms/2)]); //add an altar to one of the rooms
 
     start_pos.y = rooms[0].center.y;
     start_pos.x = rooms[0].center.x;

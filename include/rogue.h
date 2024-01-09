@@ -55,6 +55,7 @@ bool walkable;
 bool transparent;
 bool visible;
 bool seen;
+int attr;
 }Tile;
 
 typedef struct TileList {
@@ -143,6 +144,7 @@ void handleInput(int input);
 void movePlayer(Position newPos);
 void getPlayerName(void);
 void levelUP(void);
+void applyAltarEffect(void);
 void scanNearbyEntities(void);
 
 //room.c functions
@@ -152,6 +154,7 @@ Room createStartRoom(int y, int x, int height, int width);
 Room createFinalArena(int y, int x, int height, int width);
 void addRoomToMap(Room room);
 void addExit(Room room);
+void addAltar(Room room);
 void connectRoomCenters(Position centerOne, Position centerTwo);
 
 //fov.c functions

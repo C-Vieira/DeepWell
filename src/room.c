@@ -175,6 +175,12 @@ void addExit(Room room){
     map[room.center.y][room.center.x].color = COLOR_PAIR(GREEN_BLACK);
 }
 
+void addAltar(Room room) {
+    map[room.center.y][room.center.x].ch = '_';
+    map[room.center.y][room.center.x].color = COLOR_PAIR(MAGENTA_BLACK);
+    map[room.center.y][room.center.x].attr = A_BOLD;
+}
+
 void connectRoomCenters(Position centerOne, Position centerTwo){
     Position temp;
     temp.x = centerOne.x;

@@ -4,10 +4,10 @@ void drawMap(void){
     for(int y = 0; y < MAP_HEIGHT; y++){
         for(int x = 0; x < MAP_WIDTH; x++){
             if (map[y][x].visible){
-                mvaddch(y, x, map[y][x].ch | map[y][x].color);
+                mvaddch(y, x, map[y][x].ch | map[y][x].color | map[y][x].attr);
             }
             else if (map[y][x].seen){
-                mvaddch(y, x, map[y][x].ch | COLOR_PAIR(SEEN_COLOR));
+                mvaddch(y, x, map[y][x].ch | COLOR_PAIR(SEEN_COLOR) | map[y][x].attr);
             }
             else{
                 mvaddch(y, x, ' ');

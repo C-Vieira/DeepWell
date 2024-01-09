@@ -72,7 +72,7 @@ void getPlayerName(void) {
 
 void levelUP(void){
     player->health += ((player->level%10) + 10);
-    player->damage += ((player->level%10) + 2);
+    player->damage += ((player->level%10) + 5);
     player->defense += ((player->level%10) + 2);
     player->level += 1;
     player->xpAmount = 0;
@@ -81,6 +81,27 @@ void levelUP(void){
     mvprintw(27, 75, "LEVEL UP!");
     attroff(COLOR_PAIR(GREEN_BLACK));
     getch();
+}
+
+void applyAltarEffect(void) {
+    if ((rand() % 10) != 9) {
+        player->health += 50; //heal 50 hp
+        attron(COLOR_PAIR(GREEN_BLACK));
+        mvprintw(26, 75, "The altar glows with a dim light");
+        mvprintw(27, 75, "+50 HP!");
+        attroff(COLOR_PAIR(GREEN_BLACK));
+        getch();
+    }
+    else {
+        player->health -= 20; //lose 20 hp
+        attron(COLOR_PAIR(RED_BLACK));
+        mvprintw(26, 75, "The altar trembles before you");
+        mvprintw(27, 75, "-20 HP!");
+        attroff(COLOR_PAIR(RED_BLACK));
+        getch();
+    }
+    map[player->pos.y][player->pos.x].ch = ' ';
+    map[player->pos.y][player->pos.x].attr = A_NORMAL;
 }
 
 //scans and shows entities in a radius around the player
