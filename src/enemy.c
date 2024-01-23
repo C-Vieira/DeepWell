@@ -94,7 +94,13 @@ void attackEntity(Entity* target, Entity* attacker){
         return;
     }
 
-    target->health -= (attacker->damage - target->defense);
+    if ((rand() % 20) == 1) {
+        target->health -= ((attacker->damage*2) - target->defense); //critical hit
+        attron(COLOR_PAIR(YELLOW_BLACK));
+        mvprintw(27, 75, "Critical hit!", target->name); //log message
+        attroff(COLOR_PAIR(YELLOW_BLACK));
+    }else
+        target->health -= (attacker->damage - target->defense); //normal hit
 
     attron(COLOR_PAIR(VISIBLE_COLOR));
     mvprintw(26, 75, "                                                    "); //there must be a better way to clear a line...
@@ -107,6 +113,7 @@ void attackEntity(Entity* target, Entity* attacker){
         attron(COLOR_PAIR(VISIBLE_COLOR));
         mvprintw(26, 75, "                                                    "); //there must be a better way to clear a line...
         mvprintw(26, 75, "%s was defeated!", target->name); //log message
+        mvprintw(27, 75, "                                                    ");
         attroff(COLOR_PAIR(VISIBLE_COLOR));
         getch();
 
@@ -128,11 +135,11 @@ void spawnCorpse(Entity* entity){
     if((chanceForLivingFlesh != 1))
         addEnemy(createEnemy(entity->pos, CORPSE, "Corpse", '%', COLOR_PAIR(RED_BLACK), 0, 0, 0, true, 0)); //add a corpse entity to the global entity list
     else
-        addEnemy(createEnemy(entity->pos, LIVING_FLESH, "Living Flesh", '%', COLOR_PAIR(RED_BLACK), (entity->health + 5), 8, 3, false, 20)); //add living flesh instead
+        addEnemy(createEnemy(entity->pos, LIVING_FLESH, "Living Flesh", '%', COLOR_PAIR(RED_BLACK), (entity->health - 5), 8, 3, false, 20)); //add living flesh instead
     removeEnemy(entity); //remove dead enemy from the list
 }
 
-Entity* createEnemy(Position pos, int type, char* name, char symbol, int color, int health, int damage, int defense,bool isImmobile, int xpAmount){
+Entity* createEnemy(Position pos, int type, char* name, char symbol, int color, int health, int damage, int defense, bool isImmobile, int xpAmount){
 
     Entity* newEnemy = calloc(1, sizeof(Entity));
 
@@ -174,4 +181,24 @@ void moveEnemies(void){
         seekTarget(p->entity, player);
         p = p->next;
     }
+}
+
+int scaleStat(int statType, float toughness) {
+    int value = 1;
+    switch (statType)
+    {
+    case HEALTH:
+        value = floor(5 + player->level + (toughness * floorCount)) * 2;
+        break;
+    case DAMAGE:
+        value = floor(1 + player->level + (toughness * floorCount)) * 2;
+        break;
+    case DEFENSE:
+        value = floor(player->level + (toughness * floorCount) * 0.5);
+        break;
+    default:
+        break;
+    }
+
+    return value;
 }

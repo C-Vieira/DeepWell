@@ -72,7 +72,7 @@ void getPlayerName(void) {
 
 void levelUP(void){
     player->health += ((player->level%10) + 10);
-    player->damage += ((player->level%10) + 5);
+    player->damage += ((player->level%10) + 2);
     player->defense += ((player->level%10) + 2);
     player->level += 1;
     player->xpAmount = 0;
@@ -81,6 +81,20 @@ void levelUP(void){
     mvprintw(27, 75, "LEVEL UP!");
     attroff(COLOR_PAIR(GREEN_BLACK));
     getch();
+}
+
+void activateTrap(void) {
+    player->health -= 10; //lose 10 hp
+    if (player->health < 0) player->health = 1; //do not let the player die
+
+    attron(COLOR_PAIR(RED_BLACK));
+    mvprintw(26, 75, "%s sprung a trap!", player->name);
+    mvprintw(27, 75, "-10 HP!");
+    attroff(COLOR_PAIR(RED_BLACK));
+    getch();
+    map[player->pos.y][player->pos.x].ch = '^';
+    map[player->pos.y][player->pos.x].attr = A_NORMAL;
+    map[player->pos.y][player->pos.x].color = COLOR_PAIR(RED_BLACK);
 }
 
 void applyAltarEffect(void) {
@@ -94,6 +108,8 @@ void applyAltarEffect(void) {
     }
     else {
         player->health -= 20; //lose 20 hp
+        if (player->health < 0) player->health = 1; //do not let the player die
+
         attron(COLOR_PAIR(RED_BLACK));
         mvprintw(26, 75, "The altar trembles before you");
         mvprintw(27, 75, "-20 HP!");

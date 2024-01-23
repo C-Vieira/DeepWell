@@ -35,43 +35,56 @@ void addEnemiesToRoom(Room newRoom) {
             addEnemy(createEnemy(randPos, FLY, "Fly", 'f', COLOR_PAIR(BLACK_BLACK), 5, 1, 0, false, 5));
             break;
         case WORM:
-            addEnemy(createEnemy(randPos, WORM, "Worm", 's', COLOR_PAIR(BLACK_BLACK), 10, 3, 2, false, 10));
+            addEnemy(createEnemy(randPos, WORM, "Worm", 's', COLOR_PAIR(BLACK_BLACK),
+                scaleStat(HEALTH, 0.1), scaleStat(DAMAGE, 0.1), scaleStat(DEFENSE, 0.1), false, scaleStat(HEALTH, 1)));
             break;
         case RAT:
-            addEnemy(createEnemy(randPos, RAT, "Rat", 'r', COLOR_PAIR(BLACK_BLACK), 14, 5, 3, false, 20));
+            addEnemy(createEnemy(randPos, RAT, "Rat", 'r', COLOR_PAIR(BLACK_BLACK), 
+                scaleStat(HEALTH, 0.3), scaleStat(DAMAGE, 0.3), scaleStat(DEFENSE, 0.3), false, scaleStat(HEALTH, 2)));
             break;
         case RAT_KING:
-            addEnemy(createEnemy(randPos, RAT_KING, "Rat King", 'K', COLOR_PAIR(BLACK_BLACK), 20, 12, 5, false, 35));
+            addEnemy(createEnemy(randPos, RAT_KING, "Rat King", 'K', COLOR_PAIR(BLACK_BLACK),
+                scaleStat(HEALTH, 0.5), scaleStat(DAMAGE, 0.5), scaleStat(DEFENSE, 0.5), false, scaleStat(HEALTH, 5)));
             break;
         case CAVE_SPIDER:
-            addEnemy(createEnemy(randPos, CAVE_SPIDER, "Cave Spider", 'x', COLOR_PAIR(BLACK_BLACK), 25, 18, 8, false, 25));
+            addEnemy(createEnemy(randPos, CAVE_SPIDER, "Cave Spider", 'x', COLOR_PAIR(BLACK_BLACK),
+                scaleStat(HEALTH, 0.1), scaleStat(DAMAGE, 0.1), scaleStat(DEFENSE, 0.1), false, scaleStat(HEALTH, 1)));
             break;
         case BAT:
-            addEnemy(createEnemy(randPos, BAT, "Bat", 'b', COLOR_PAIR(BLACK_BLACK), 32, 24, 12, false, 35));
+            addEnemy(createEnemy(randPos, BAT, "Bat", 'b', COLOR_PAIR(BLACK_BLACK),
+                scaleStat(HEALTH, 0.1), scaleStat(DAMAGE, 0.1), scaleStat(DEFENSE, 0.1), false, scaleStat(HEALTH, 1)));
             break;
         case GHOUL:
-            addEnemy(createEnemy(randPos, GHOUL, "Ghoul", 'g', COLOR_PAIR(BLACK_BLACK), 38, 28, 16, false, 40));
+            addEnemy(createEnemy(randPos, GHOUL, "Ghoul", 'g', COLOR_PAIR(BLACK_BLACK),
+                scaleStat(HEALTH, 0.3), scaleStat(DAMAGE, 0.3), scaleStat(DEFENSE, 0.3), false, scaleStat(HEALTH, 2)));
             break;
         case CENTIPEDE:
-            addEnemy(createEnemy(randPos, CENTIPEDE, "Centipede", 'c', COLOR_PAIR(BLACK_BLACK), 45, 32, 20, false, 50));
+            addEnemy(createEnemy(randPos, CENTIPEDE, "Centipede", 'c', COLOR_PAIR(BLACK_BLACK),
+                scaleStat(HEALTH, 0.5), scaleStat(DAMAGE, 0.5), scaleStat(DEFENSE, 0.5), false, scaleStat(HEALTH, 5)));
             break;
         case OOZE:
-            addEnemy(createEnemy(randPos, OOZE, "Ooze", 'o', COLOR_PAIR(BLACK_BLACK), 50, 38, 22, false, 45));
+            addEnemy(createEnemy(randPos, OOZE, "Ooze", 'o', COLOR_PAIR(BLACK_BLACK),
+                scaleStat(HEALTH, 0.3), scaleStat(DAMAGE, 0.3), scaleStat(DEFENSE, 0.3), false, scaleStat(HEALTH, 2)));
             break;
         case DEEP_ONE:
-            addEnemy(createEnemy(randPos, DEEP_ONE, "Deep One", 'd', COLOR_PAIR(BLACK_BLACK), 58, 42, 32, false, 50));
+            addEnemy(createEnemy(randPos, DEEP_ONE, "Deep One", 'd', COLOR_PAIR(BLACK_BLACK),
+                scaleStat(HEALTH, 0.3), scaleStat(DAMAGE, 0.3), scaleStat(DEFENSE, 0.3), false, scaleStat(HEALTH, 2)));
             break;
         case DAGON:
-            addEnemy(createEnemy(randPos, DAGON, "Dagon", 'D', COLOR_PAIR(BLACK_BLACK), 72, 68, 54, false, 100));
+            addEnemy(createEnemy(randPos, DAGON, "Dagon", 'D', COLOR_PAIR(BLACK_BLACK),
+                scaleStat(HEALTH, 0.5), scaleStat(DAMAGE, 0.5), scaleStat(DEFENSE, 0.5), false, scaleStat(HEALTH, 5)));
             break;
         case STAR_SPAWN:
-            addEnemy(createEnemy(randPos, STAR_SPAWN, "Star Spawn", 'S', COLOR_PAIR(BLACK_BLACK), 75, 68, 58, false, 110));
+            addEnemy(createEnemy(randPos, STAR_SPAWN, "Star Spawn", 'S', COLOR_PAIR(BLACK_BLACK),
+                scaleStat(HEALTH, 0.5), scaleStat(DAMAGE, 0.5), scaleStat(DEFENSE, 0.5), false, scaleStat(HEALTH, 5)));
             break;
         case COSMIC_HORROR:
-            addEnemy(createEnemy(randPos, COSMIC_HORROR, "Cosmic Horror", 'H', COLOR_PAIR(BLACK_BLACK), 82, 80, 80, false, 120));
+            addEnemy(createEnemy(randPos, COSMIC_HORROR, "Cosmic Horror", 'H', COLOR_PAIR(BLACK_BLACK),
+                scaleStat(HEALTH, 0.5), scaleStat(DAMAGE, 0.5), scaleStat(DEFENSE, 0.5), false, scaleStat(HEALTH, 5)));
             break;
         case CTHULHU:
-            addEnemy(createEnemy(randPos, CTHULHU, "Cthulhu", 'C', COLOR_PAIR(BLACK_BLACK), 1000, 200, 250, false, 1000));
+            addEnemy(createEnemy(randPos, CTHULHU, "Cthulhu", 'C', COLOR_PAIR(BLACK_BLACK),
+                scaleStat(HEALTH, 1), scaleStat(DAMAGE, 1), scaleStat(DEFENSE, 1), false, scaleStat(HEALTH, 10)));
             break;
         default:
             addEnemy(createEnemy(randPos, EMPTY, "", ' ', COLOR_PAIR(BLACK_BLACK), 0, 0, 0, true, 0));
@@ -163,7 +176,12 @@ Room createFinalArena(int y, int x, int height, int width) {
 void addRoomToMap(Room room){
     for(int y = room.pos.y; y < room.pos.y + room.height; y++){
         for(int x = room.pos.x; x < room.pos.x + room.width; x++){
-            map[y][x].ch = ' ';
+            if (rand() % 100 == 1) { //1% chance for a trapped tile
+                map[y][x].ch = 'v'; //add a trap
+                map[y][x].attr = A_INVIS;
+            }
+            else map[y][x].ch = ' ';
+
             map[y][x].walkable = true;
             map[y][x].transparent = true;
         }

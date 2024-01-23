@@ -45,11 +45,6 @@ void gameLoop(void){
         handleInput(ch);
         moveEnemies();
 
-        if (player->health <= 0) { //defeat
-            getch();
-            break;
-        }
-
         if ((player->pos.y == exit_pos.y) && (player->pos.x == exit_pos.x)) { //next level
             floorCount++;
             resetMap();
@@ -58,11 +53,19 @@ void gameLoop(void){
         else if (map[player->pos.y][player->pos.x].ch == '_') { //over an altar
             applyAltarEffect();
         }
+        else if (map[player->pos.y][player->pos.x].ch == 'v') { //stepped on a trap
+            activateTrap();
+        }
 
         if(player->xpAmount >= player->amountForNextLevel) levelUP();
 
         if (defeatedFinalBoss) { //victory
             drawVictoryScreen();
+            getch();
+            break;
+        }
+
+        if (player->health <= 0) { //defeat
             getch();
             break;
         }

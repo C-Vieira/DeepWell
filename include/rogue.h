@@ -39,6 +39,11 @@
 #define COSMIC_HORROR 14
 #define CTHULHU 15
 
+//stat types
+#define HEALTH 1
+#define DAMAGE 2
+#define DEFENSE 3
+
 //floors
 #define START_FLOOR 0
 #define FINAL_FLOOR 20
@@ -110,6 +115,7 @@ void spawnCorpse(Entity* entity);
 Entity* createEnemy(Position pos, int type, char* name, char symbol, int color, int health, int damage, int defense, bool isImmobile, int xpAmount);
 Entity* checkForTarget(Position target_pos);
 void moveEnemies(void);
+int scaleStat(int statType, float toughness);
 
 //engine.c functions
 bool cursesSetup(void);
@@ -144,6 +150,7 @@ void handleInput(int input);
 void movePlayer(Position newPos);
 void getPlayerName(void);
 void levelUP(void);
+void activateTrap(void);
 void applyAltarEffect(void);
 void scanNearbyEntities(void);
 

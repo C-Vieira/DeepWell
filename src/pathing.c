@@ -85,7 +85,7 @@ void seekTarget(Entity* enemy, Entity* target) {
     Position goal = { target->pos.y, target->pos.x };
     Position newPos = { enemy->pos.y, enemy->pos.x };
 
-    int radius = 10;
+    int radius = 5;
     
     //add neighborhood to tile list
     Position temp;
