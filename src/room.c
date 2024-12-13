@@ -176,11 +176,11 @@ Room createFinalArena(int y, int x, int height, int width) {
 void addRoomToMap(Room room){
     for(int y = room.pos.y; y < room.pos.y + room.height; y++){
         for(int x = room.pos.x; x < room.pos.x + room.width; x++){
-            if (rand() % 100 == 1) { //1% chance for a trapped tile
+            /*if (rand() % 100 == 1) { //1% chance for a trapped tile
                 map[y][x].ch = 'v'; //add a trap
                 map[y][x].attr = A_INVIS;
             }
-            else map[y][x].ch = ' ';
+            else*/ map[y][x].ch = ' ';
 
             map[y][x].walkable = true;
             map[y][x].transparent = true;

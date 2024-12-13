@@ -83,6 +83,7 @@ void levelUP(void){
     getch();
 }
 
+// Unused
 void activateTrap(void) {
     player->health -= 10; //lose 10 hp
     if (player->health < 0) player->health = 1; //do not let the player die

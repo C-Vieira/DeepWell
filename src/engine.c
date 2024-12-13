@@ -53,9 +53,9 @@ void gameLoop(void){
         else if (map[player->pos.y][player->pos.x].ch == '_') { //over an altar
             applyAltarEffect();
         }
-        else if (map[player->pos.y][player->pos.x].ch == 'v') { //stepped on a trap
+        /*else if (map[player->pos.y][player->pos.x].ch == 'v') { //stepped on a trap
             activateTrap();
-        }
+        }*/
 
         if(player->xpAmount >= player->amountForNextLevel) levelUP();
 
