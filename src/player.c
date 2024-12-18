@@ -61,10 +61,7 @@ void movePlayer(Position newPos){
 void getPlayerName(void) {
     echo();
     char* newName;
-    mvprintw(23, 35, "                                               ");
-    mvprintw(24, 35, "                                               ");
-    mvprintw(23, 56, "Who am I? ");
-    refresh();
+    showPlayerNameRequest();
     getstr(newName);
     player->name = newName;
     noecho();
@@ -77,10 +74,8 @@ void levelUP(void){
     player->level += 1;
     player->xpAmount = 0;
     player->amountForNextLevel = pow(player->level, 2) + (50 * player->level) + 50;
-    attron(COLOR_PAIR(GREEN_BLACK));
-    mvprintw(27, 75, "LEVEL UP!");
-    attroff(COLOR_PAIR(GREEN_BLACK));
-    getch();
+    
+    showLevelUPMessage();
 }
 
 // Unused
@@ -101,39 +96,15 @@ void activateTrap(void) {
 void applyAltarEffect(void) {
     if ((rand() % 10) != 9) {
         player->health += 50; //heal 50 hp
-        attron(COLOR_PAIR(GREEN_BLACK));
-        mvprintw(26, 75, "The altar glows with a dim light");
-        mvprintw(27, 75, "+50 HP!");
-        attroff(COLOR_PAIR(GREEN_BLACK));
-        getch();
+        
+        showGoodAltarMessage();
     }
     else {
         player->health -= 20; //lose 20 hp
         if (player->health < 0) player->health = 1; //do not let the player die
 
-        attron(COLOR_PAIR(RED_BLACK));
-        mvprintw(26, 75, "The altar trembles before you");
-        mvprintw(27, 75, "-20 HP!");
-        attroff(COLOR_PAIR(RED_BLACK));
-        getch();
+        showBadAltarMessage();
     }
     map[player->pos.y][player->pos.x].ch = ' ';
     map[player->pos.y][player->pos.x].attr = A_NORMAL;
-}
-
-//scans and shows entities in a radius around the player
-void scanNearbyEntities(void) {
-    int radius = 10, y = 26;
-
-    attron(COLOR_PAIR(VISIBLE_COLOR));
-    mvprintw(26, 5, "NEARBY:");
-    attroff(COLOR_PAIR(VISIBLE_COLOR));
-    EntityList* p = enemies;
-    while (p != NULL) {
-        if (getDistance(p->entity->pos, player->pos) < radius && lineOfSight(p->entity->pos, player->pos)){
-            mvaddch(++y, 5, p->entity->ch | p->entity->color);
-            mvprintw(y, 6, ": %s                                ", p->entity->name);
-        }
-        p = p->next;
-    }
 }

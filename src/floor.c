@@ -93,35 +93,3 @@ char* selectFloorName(void) {
         break;
     }
 }
-
-void showFloorMessage(void) {
-    switch (floorCount)
-    {
-    case 0:
-        mvprintw(0, 0, "The door is shut, it's only down from here ...");
-        getch();
-        break;
-    case 1:
-        mvprintw(0, 0, "You can hear flies buzzing about ...");
-        getch();
-        break;
-    case 6:
-        mvprintw(0, 0, "A chill runs down your spine ...");
-        getch();
-        break;
-    case 11:
-        mvprintw(0, 0, "You're beyond return ...");
-        getch();
-        break;
-    case 16:
-        mvprintw(0, 0, "We were not meant to get here ...");
-        getch();
-        break;
-    case 21:
-        mvprintw(0, 0, "Chaos incarnate Cthulhu awakens !");
-        getch();
-        break;
-    default:
-        break;
-    }
-}

@@ -3,6 +3,8 @@
 const int MAP_HEIGHT = 25;
 const int MAP_WIDTH = 100;
 
+WINDOW* mainWin;
+WINDOW* hudWin;
 Entity* player;
 EntityList* enemies = NULL;
 Tile** map;
@@ -21,6 +23,9 @@ int main(void){
     srand(time(NULL));
 
     if(compatibleTerminal){
+
+        //mainWin = createWindow(26, 100, 0, 0);
+        //hudWin = createWindow(6, 120, 25, 0);
 
         map = createMapTiles();
         start_pos = setupMap();

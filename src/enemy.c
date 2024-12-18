@@ -86,36 +86,22 @@ void attackEntity(Entity* target, Entity* attacker){
     if (target->health <= 0 && target->type == PLAYER) return; //skip if the player has already died this turn
 
     if(target->defense >= attacker->damage){ //target's defense is too high, cannot take any damage
-        attron(COLOR_PAIR(VISIBLE_COLOR));
-        mvprintw(26, 75, "                                                    "); //there must be a better way to clear a line...
-        mvprintw(26, 75, "%s blocked the attack!", target->name); //log message
-        attroff(COLOR_PAIR(VISIBLE_COLOR));
-        getch();
+        showAttackBlockedMessage(target); // Attack Blocked message
         return;
     }
 
     if ((rand() % 20) == 1) {
         target->health -= ((attacker->damage*2) - target->defense); //critical hit
-        attron(COLOR_PAIR(YELLOW_BLACK));
-        mvprintw(27, 75, "Critical hit!", target->name); //log message
-        attroff(COLOR_PAIR(YELLOW_BLACK));
+        showCriticalHitMessage(); // Critical Hit message
     }else
         target->health -= (attacker->damage - target->defense); //normal hit
 
-    attron(COLOR_PAIR(VISIBLE_COLOR));
-    mvprintw(26, 75, "                                                    "); //there must be a better way to clear a line...
-    mvprintw(26, 75, "%s scored a hit on %s!", attacker->name, target->name); //log message
-    attroff(COLOR_PAIR(VISIBLE_COLOR));
-    getch();
+    showHitMessage(target, attacker); // Hit message
+
     if(target->health <= 0){ //spawn corpse on enemy death
         spawnCorpse(target);
         attacker->xpAmount += target->xpAmount;
-        attron(COLOR_PAIR(VISIBLE_COLOR));
-        mvprintw(26, 75, "                                                    "); //there must be a better way to clear a line...
-        mvprintw(26, 75, "%s was defeated!", target->name); //log message
-        mvprintw(27, 75, "                                                    ");
-        attroff(COLOR_PAIR(VISIBLE_COLOR));
-        getch();
+        showDefeatedMessage(target); // Defeated message
 
         if (target->type == PLAYER) drawDefeatScreen(attacker->name); //if it was a player, end the game
     }

@@ -97,6 +97,9 @@ Position center;
 }Room;
 
 //draw.c
+WINDOW* createWindow(int height, int width, int starty, int startx);
+void clearWindow(void);
+void drawWindow(void);
 void drawMap(void);
 void drawEntity(Entity* entity);
 void drawMenu(void);
@@ -104,6 +107,16 @@ void drawVictoryScreen(void);
 void drawDefeatScreen(char* lastAttacker);
 void drawStats(void);
 void drawEverything(void);
+void showFloorMessage(void);
+void showAttackBlockedMessage(Entity* target);
+void showCriticalHitMessage(void);
+void showHitMessage(Entity* target, Entity* attacker);
+void showDefeatedMessage(Entity* target);
+void showPlayerNameRequest(void);
+void showLevelUPMessage(void);
+void showBadAltarMessage(void);
+void showGoodAltarMessage(void);
+void scanNearbyEntities(void);
 
 //enemy.c functions
 void addEnemy(Entity* enemy);
@@ -125,7 +138,6 @@ void closeGame(void);
 //floor.c functions
 int selectEnemiesFromPool(void);
 char* selectFloorName(void);
-void showFloorMessage(void);
 
 //map.c functions
 Tile** createMapTiles(void);
@@ -152,7 +164,6 @@ void getPlayerName(void);
 void levelUP(void);
 void activateTrap(void);
 void applyAltarEffect(void);
-void scanNearbyEntities(void);
 
 //room.c functions
 Room createRoom(int y, int x, int height, int width);
@@ -175,6 +186,8 @@ int getSign(int a);
 //extern
 extern const int MAP_HEIGHT;
 extern const int MAP_WIDTH;
+extern WINDOW* mainWin;
+extern WINDOW* hudWin;
 extern Entity* player;
 extern Tile** map;
 extern EntityList* enemies; //global enemy list
