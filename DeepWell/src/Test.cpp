@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "Setup.h"
+#include "Engine.h"
 
 #include <flecs.h>
 
@@ -29,7 +29,7 @@ struct TakesInputTag { };
 struct FollowsAITag { };
 
 // Functions
-int getRandomDirection() {
+static int getRandomDirection() {
 	return rand() % 3 - 1;
 }
 
@@ -52,9 +52,10 @@ int main() {
 	world.component<FollowsAITag>();
 
 	// HandleInput System
-	flecs::system handleInputSystem = world.system<PositionComponent, DirectionComponent, TakesInputTag>("HandleInputSystem")
+	flecs::system handleInputSystem = world.system<PositionComponent, DirectionComponent>("HandleInputSystem")
 		.kind(flecs::OnLoad)
-		.each([](PositionComponent& pos, DirectionComponent& dir, TakesInputTag& in) {
+		.with<TakesInputTag>()
+		.each([](PositionComponent& pos, DirectionComponent& dir) {
 		dir.y = 0; dir.x = 0;
 		
 		switch(ch) {
@@ -79,8 +80,9 @@ int main() {
 	});
 
 	// MoveRandom System
-	flecs::system moveSystem = world.system<PositionComponent, DirectionComponent, FollowsAITag>("MoveRandomSystem")
-		.each([](PositionComponent& pos, DirectionComponent& dir, FollowsAITag& fai) {
+	flecs::system moveSystem = world.system<PositionComponent, DirectionComponent>("MoveRandomSystem")
+		.with<FollowsAITag>()
+		.each([](PositionComponent& pos, DirectionComponent& dir) {
 		pos.y += dir.y + getRandomDirection();
 		pos.x += dir.x + getRandomDirection();
 	});
@@ -105,7 +107,7 @@ int main() {
 	}
 
 	// Player Entity
-	auto player = world.entity("Player")
+	flecs::entity player = world.entity("Player")
 		.insert([](PositionComponent& pos, DirectionComponent& dir, CharComponent& cha, ColorComponent& c) {
 		pos = { rand() % 30, rand() % 100 };
 		dir = { 0, 0 };
