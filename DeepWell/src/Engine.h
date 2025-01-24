@@ -10,7 +10,9 @@
 #include <flecs.h>
 #include "Components.h"
 
-//color pairs
+#include "Map.h"
+
+// Color pairs
 #define WHITE_BLACK 1
 #define BLUE_BLACK 2
 #define RED_BLACK 3

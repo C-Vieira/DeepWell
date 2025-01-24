@@ -14,7 +14,7 @@ int main() {
 
 		int op;
 		do {
-			// "Simulates Menu Screen"
+			// "Simulates" Menu Screen
 			clear();
 			mvprintw(2, 5, "Menu Screen");
 			mvprintw(3, 5, " - Welcome!");

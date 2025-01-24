@@ -21,6 +21,11 @@ struct KeyInputComponent {
 	int key;
 };
 
+struct WalkableComponent {
+	bool walkable;
+};
+
 // Tags
 struct TakesInputTag {};
 struct FollowsAITag {};
+struct TileEntityTag {};

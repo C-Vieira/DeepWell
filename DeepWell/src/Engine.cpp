@@ -1,6 +1,9 @@
 #include "Engine.h"
 
+using CollisionQuery = flecs::query<PositionComponent, WalkableComponent>;
+
 flecs::system printSystem;
+flecs::system printTileSystem;
 
 // Helper Function
 static int getRandomDirection() {
@@ -14,19 +17,23 @@ static void registerComponents(flecs::world world) {
     world.component<CharComponent>();
     world.component<ColorComponent>();
     world.component<KeyInputComponent>();
+    world.component<WalkableComponent>();
 
     // Tags
     world.component<TakesInputTag>();
     world.component<FollowsAITag>();
+    world.component<TileEntityTag>();
 }
 
 static void setupSystems(flecs::world world) {
+    // Query for finding a tile entity at a position
+    CollisionQuery q = world.query<PositionComponent, WalkableComponent>("CollisionQuery");
+
     // HandleInput System
-    world.system<PositionComponent, DirectionComponent, KeyInputComponent>("HandleInputSystem")
+    world.system<DirectionComponent, KeyInputComponent>("HandleInputSystem")
         .kind(flecs::OnLoad)
         .with<TakesInputTag>()
-        .each([](PositionComponent& pos, DirectionComponent& dir, KeyInputComponent& kin) {
-        dir.y = 0; dir.x = 0;
+        .each([](DirectionComponent& dir, KeyInputComponent& kin) {
 
         switch (kin.key) {
         case 'w':
@@ -45,21 +52,49 @@ static void setupSystems(flecs::world world) {
             break;
         }
 
-        pos.y += dir.y;
-        pos.x += dir.x;
     });
 
-    // MoveRandom System
-    world.system<PositionComponent, DirectionComponent>("MoveRandomSystem")
+    // RandomDir System
+    world.system<DirectionComponent>("RandomDirSystem")
+        .kind(flecs::PreUpdate)
         .with<FollowsAITag>()
-        .each([](PositionComponent& pos, DirectionComponent& dir) {
-        pos.y += dir.y + getRandomDirection();
-        pos.x += dir.x + getRandomDirection();
+        .each([](DirectionComponent & dir) {
+        // Set random direction between -1 and 1
+        dir.y = getRandomDirection();
+        dir.x = getRandomDirection();
+    });
+
+    // Move System
+    world.system<PositionComponent, DirectionComponent>("MoveSystem")
+        .each([q](PositionComponent& pos, DirectionComponent& dir) {
+        
+        // Look for the tile at the target position
+        flecs::entity e = q.find([&](PositionComponent& p, WalkableComponent& w) {
+            return ((p.y == (pos.y + dir.y)) && (p.x == (pos.x + dir.x)) && w.walkable);
+        });
+
+        // Found a walkable tile
+        if (e) {
+            // Can move
+            pos.y += dir.y;
+            pos.x += dir.x;
+        }
+        
+        dir.y = 0; dir.x = 0;
+    });
+
+    // PrintTile System
+    printTileSystem = world.system<PositionComponent, CharComponent, ColorComponent>("PrintTileSystem")
+        .kind(flecs::PostUpdate)
+        .with<TileEntityTag>()
+        .each([](PositionComponent& pos, CharComponent& cha, ColorComponent& c) {
+        mvaddch(pos.y, pos.x, cha.ch | c.color);
     });
 
     // Print System
     printSystem = world.system<PositionComponent, CharComponent, ColorComponent>("PrintSystem")
         .kind(flecs::OnStore)
+        .without<TileEntityTag>()
         .each([](PositionComponent& pos, CharComponent& cha, ColorComponent& c) {
         mvaddch(pos.y, pos.x, cha.ch | c.color);
     });
@@ -69,7 +104,7 @@ static void setupEntities(flecs::world world) {
     // Player Entity
     world.entity("Player")
         .insert([](PositionComponent& pos, DirectionComponent& dir, CharComponent& cha, ColorComponent& c, KeyInputComponent& kin) {
-        pos = { rand() % 30, rand() % 100 };
+        pos = { 5, 5 };
         dir = { 0, 0 };
         cha = { '@' };
         c = { COLOR_PAIR(WHITE_BLACK) };
@@ -81,7 +116,7 @@ static void setupEntities(flecs::world world) {
     for (int i = 0; i < MAX_ENTITIES; i++) {
         world.entity()
             .insert([](PositionComponent& pos, DirectionComponent& dir, CharComponent& cha, ColorComponent& c) {
-            pos = { rand() % 30, rand() % 100 };
+            pos = { rand() % 30, rand() % 80 };
             dir = { 0, 0 };
             cha = { '@' };
             c = { COLOR_PAIR(GREEN_BLACK) };
@@ -93,8 +128,8 @@ void ECSSetup(flecs::world world)
 {
     
     registerComponents(world);
-    setupSystems(world);
     setupEntities(world);
+    setupSystems(world);
 
 }
 
@@ -127,6 +162,22 @@ bool cursesSetup() {
 
 void doGameLoop(flecs::world world)
 {
+    setupMapTileEntities(world);
+
+    //flecs::query<PositionComponent, WalkableComponent> q = world.query<PositionComponent, WalkableComponent>();
+    //flecs::entity e = q.find([](PositionComponent& p, WalkableComponent& w) {
+    //    return (p.y == 10 && p.x == 10) && w.walkable;
+    //});
+    //
+    //if (e) {
+    //    mvprintw(5, 5, "Tile Found !");
+    //}
+    //else {
+    //    mvprintw(5, 5, "Tile not Found ...");
+    //}
+    //getch();
+
+    printTileSystem.run();
     printSystem.run();
 
     flecs::entity player = world.lookup("Player");
