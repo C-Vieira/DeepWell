@@ -25,7 +25,16 @@ struct WalkableComponent {
 	bool walkable;
 };
 
+// -Scenes
+using Pipeline = flecs::entity;
+struct MenuScene { Pipeline pip; };
+struct GameScene { Pipeline pip; };
+
 // Tags
 struct TakesInputTag {};
 struct FollowsAITag {};
 struct TileEntityTag {};
+
+// -Scene Tags/Relationships
+struct ActiveScene {}; // Represents the current scene
+struct SceneRoot {};   // Parent for all entities unique to the scene

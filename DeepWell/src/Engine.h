@@ -10,6 +10,8 @@
 #include <flecs.h>
 #include "Components.h"
 
+#include "Scene.h"
+
 #include "Map.h"
 
 // Color pairs
@@ -24,7 +26,7 @@
 
 
 
-void ECSSetup(flecs::world world);
+void ecsSetup(flecs::world world);
 
 bool cursesSetup();
 

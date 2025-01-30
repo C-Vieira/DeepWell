@@ -6,7 +6,7 @@ int main() {
 	srand(time(NULL));
 
 	flecs::world world;
-	ECSSetup(world);
+	ecsSetup(world);
 
 	bool compatibleTerminal = cursesSetup();
 
@@ -14,15 +14,15 @@ int main() {
 
 		int op;
 		do {
-			// "Simulates" Menu Screen
-			clear();
-			mvprintw(2, 5, "Menu Screen");
-			mvprintw(3, 5, " - Welcome!");
+			world.add<ActiveScene, MenuScene>();
 			op = getch();
 			clear();
 
-			if(op != 'q')
+			if (op != 'q') {
+				world.add<ActiveScene, GameScene>();
 				doGameLoop(world);
+			}
+				
 
 		} while (op != 'q');
 

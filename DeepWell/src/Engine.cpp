@@ -32,6 +32,7 @@ static void setupSystems(flecs::world world) {
     // HandleInput System
     world.system<DirectionComponent, KeyInputComponent>("HandleInputSystem")
         .kind(flecs::OnLoad)
+        .kind<GameScene>()
         .with<TakesInputTag>()
         .each([](DirectionComponent& dir, KeyInputComponent& kin) {
 
@@ -57,6 +58,7 @@ static void setupSystems(flecs::world world) {
     // RandomDir System
     world.system<DirectionComponent>("RandomDirSystem")
         .kind(flecs::PreUpdate)
+        .kind<GameScene>()
         .with<FollowsAITag>()
         .each([](DirectionComponent & dir) {
         // Set random direction between -1 and 1
@@ -66,6 +68,7 @@ static void setupSystems(flecs::world world) {
 
     // Move System
     world.system<PositionComponent, DirectionComponent>("MoveSystem")
+        .kind<GameScene>()
         .each([q](PositionComponent& pos, DirectionComponent& dir) {
         
         // Look for the tile at the target position
@@ -86,6 +89,7 @@ static void setupSystems(flecs::world world) {
     // PrintTile System
     printTileSystem = world.system<PositionComponent, CharComponent, ColorComponent>("PrintTileSystem")
         .kind(flecs::PostUpdate)
+        .kind<GameScene>()
         .with<TileEntityTag>()
         .each([](PositionComponent& pos, CharComponent& cha, ColorComponent& c) {
         mvaddch(pos.y, pos.x, cha.ch | c.color);
@@ -94,6 +98,7 @@ static void setupSystems(flecs::world world) {
     // Print System
     printSystem = world.system<PositionComponent, CharComponent, ColorComponent>("PrintSystem")
         .kind(flecs::OnStore)
+        .kind<GameScene>()
         .without<TileEntityTag>()
         .each([](PositionComponent& pos, CharComponent& cha, ColorComponent& c) {
         mvaddch(pos.y, pos.x, cha.ch | c.color);
@@ -110,24 +115,13 @@ static void setupEntities(flecs::world world) {
         c = { COLOR_PAIR(WHITE_BLACK) };
         kin = { ' ' };
     }).add(world.component<TakesInputTag>());
-
-    // Test Entities
-    const int MAX_ENTITIES = 30;
-    for (int i = 0; i < MAX_ENTITIES; i++) {
-        world.entity()
-            .insert([](PositionComponent& pos, DirectionComponent& dir, CharComponent& cha, ColorComponent& c) {
-            pos = { rand() % 30, rand() % 80 };
-            dir = { 0, 0 };
-            cha = { '@' };
-            c = { COLOR_PAIR(GREEN_BLACK) };
-        }).add(world.component<FollowsAITag>());
-    }
 }
 
-void ECSSetup(flecs::world world)
+void ecsSetup(flecs::world world)
 {
     
     registerComponents(world);
+    initScenes(world);
     setupEntities(world);
     setupSystems(world);
 
@@ -162,21 +156,6 @@ bool cursesSetup() {
 
 void doGameLoop(flecs::world world)
 {
-    setupMapTileEntities(world);
-
-    //flecs::query<PositionComponent, WalkableComponent> q = world.query<PositionComponent, WalkableComponent>();
-    //flecs::entity e = q.find([](PositionComponent& p, WalkableComponent& w) {
-    //    return (p.y == 10 && p.x == 10) && w.walkable;
-    //});
-    //
-    //if (e) {
-    //    mvprintw(5, 5, "Tile Found !");
-    //}
-    //else {
-    //    mvprintw(5, 5, "Tile not Found ...");
-    //}
-    //getch();
-
     printTileSystem.run();
     printSystem.run();
 
