@@ -2,6 +2,7 @@
 
 IF "%~1" == "" GOTO PrintHelp
 IF "%~1" == "compile" GOTO Compile
+IF "%~1" == "run" GOTO Run
 
 build\bin\premake\premake5.exe %1
 GOTO Done
@@ -28,5 +29,13 @@ if not defined DevEnvDir (
 
 set solutionFile="DeepWell.sln"
 msbuild /t:Build /p:Configuration=Debug /p:Platform=x64 %solutionFile%
+
+GOTO Done
+
+:Run
+cd W:\bin\Debug-windows-x86_64\DeepWell
+start DeepWell.exe
+
+cd W:\
 
 :Done
