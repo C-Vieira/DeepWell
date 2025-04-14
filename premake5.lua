@@ -63,6 +63,10 @@ project "DeepWell"
 		"pdcurses.lib"
 	}
 
+  --linkoptions{
+  --  "--enable-sigwinch"
+  --}
+
 	defines{
 
 	}
