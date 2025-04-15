@@ -13,6 +13,8 @@
 #define CYAN_BLACK 7
 #define MAGENTA_BLACK 8
 
+namespace Atlas {
+
 class Application {
 public:
   static char curentInput;
@@ -22,9 +24,11 @@ public:
   Application();
   ~Application();
 
-  void Init();
-  void Run();
+  virtual void Init() = 0;
+  virtual void Run() = 0;
 
-private:
+protected:
   bool m_Running = true;
 };
+
+} // namespace Atlas

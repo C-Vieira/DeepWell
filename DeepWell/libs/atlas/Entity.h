@@ -3,6 +3,8 @@
 #include "Component.h"
 #include <vector>
 
+namespace Atlas {
+
 struct Position {
   int x, y;
 };
@@ -18,3 +20,5 @@ public:
 
   void addComponent(Component *component);
 };
+
+} // namespace Atlas

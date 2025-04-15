@@ -1,9 +1,9 @@
-#include "Application.h"
+#include "Game.h"
 
 // Entry Point
 int main() {
 
-	Application game;
+	Game game;
 	game.Init();
 	game.Run();
 

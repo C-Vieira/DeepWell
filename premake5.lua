@@ -41,6 +41,8 @@ project "DeepWell"
 	files{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+    "%{prj.name}/libs/atlas/**.h",
+    "%{prj.name}/libs/atlas/**.cpp",
 		"%{prj.name}/libs/flecs/**.h",
 		"%{prj.name}/libs/flecs/**.c"
 	}
@@ -52,6 +54,7 @@ project "DeepWell"
 	includedirs{
 		"Dependencies/PDCurses-3.9",
 		"Dependencies/PDCurses-3.9/wincon",
+		"%{prj.name}/libs/atlas",
 		"%{prj.name}/libs/flecs"
 	}
 

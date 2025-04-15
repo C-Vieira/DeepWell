@@ -1,5 +1,7 @@
 #include "Entity.h"
 
+namespace Atlas {
+
 Entity::Entity(Position pos) : m_pos(pos) {}
 
 void Entity::update() {
@@ -11,3 +13,5 @@ void Entity::update() {
 void Entity::addComponent(Component *component) {
   m_Components.push_back(component);
 }
+
+} // namespace Atlas

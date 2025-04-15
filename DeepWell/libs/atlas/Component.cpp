@@ -3,6 +3,8 @@
 #include "Entity.h"
 #include "Renderer.h"
 #include <cstdlib>
+
+namespace Atlas {
 #include <curses.h>
 
 void clearPrevPos(Entity &entity) {
@@ -90,3 +92,5 @@ void MoveRandomComponent::update(Entity &entity) {
     break;
   }
 }
+
+} // namespace Atlas

@@ -1,15 +1,13 @@
-#include "Application.h"
-#include "Component.h"
-#include "Renderer.h"
+#include "Game.h"
+#include "../libs/atlas/Component.h"
+#include "../libs/atlas/Renderer.h"
 #include <cstdlib>
 #include <ctime>
 #include <curses.h>
 
-char Application::curentInput = ' ';
+Game::Game() {};
 
-Application::Application() {}
-
-Application::~Application() { endwin(); }
+Game::~Game() { endwin(); };
 
 // For Testing
 // TODO: Move this to a better place
@@ -20,42 +18,42 @@ void setupMainWindow() {
   int starty = (LINES - height) / 2;
   int startx = (COLS - width) / 2;
 
-  WINDOW *win =
-      Renderer::getInstance().createWindow(height, width, starty, startx);
-  Renderer::getInstance().setMainWindow(win);
+  Atlas::WINDOW *win = Atlas::Renderer::getInstance().createWindow(
+      height, width, starty, startx);
+  Atlas::Renderer::getInstance().setMainWindow(win);
 }
 
 void handleResize() {
-  WINDOW *mainWindow = Renderer::getInstance().getMainWindow();
+  Atlas::WINDOW *mainWindow = Atlas::Renderer::getInstance().getMainWindow();
 
   int maxY, maxX;
   getmaxyx(stdscr, maxY, maxX);
   resize_term(maxY, maxX);
 
   clear();
-  Renderer::getInstance().clearWindow(mainWindow);
+  Atlas::Renderer::getInstance().clearWindow(mainWindow);
 
   int height = 30;
   int width = 50;
   int starty = (maxY - height) / 2;
   int startx = (maxX - width) / 2;
-  WINDOW *newWindow =
-      Renderer::getInstance().createWindow(height, width, starty, startx);
+  Atlas::WINDOW *newWindow = Atlas::Renderer::getInstance().createWindow(
+      height, width, starty, startx);
 
-  Renderer::getInstance().setMainWindow(mainWindow);
+  Atlas::Renderer::getInstance().setMainWindow(mainWindow);
 
   // Testing Window Resize
-  mvwprintw(mainWindow, 0, 0, "Current MaxY = %d", maxY);
-  mvwprintw(mainWindow, 0, 20, "Current MaxX = %d", maxX);
+  mvwprintw((WINDOW *)mainWindow, 0, 0, "Current MaxY = %d", maxY);
+  mvwprintw((WINDOW *)mainWindow, 0, 20, "Current MaxX = %d", maxX);
 }
 
-void Application::Run() {
+void Game::Run() {
 
-  WINDOW *mainWindow = Renderer::getInstance().getMainWindow();
+  Atlas::WINDOW *mainWindow = Atlas::Renderer::getInstance().getMainWindow();
   int op;
 
   // nodelay(mainWindow, true);
-  handleResize();
+  // handleResize();
 
   // Game Loop
   while (m_Running) {
@@ -68,7 +66,7 @@ void Application::Run() {
       m_Entities[i].update();
     }
 
-    Application::curentInput = wgetch(mainWindow);
+    Application::curentInput = wgetch((WINDOW *)mainWindow);
     op = Application::curentInput;
 
     if (op == 'q')
@@ -76,7 +74,7 @@ void Application::Run() {
   }
 }
 
-void Application::Init() {
+void Game::Init() {
   srand((unsigned int)time(NULL));
 
   // Curses Setup
@@ -104,20 +102,22 @@ void Application::Init() {
   setupMainWindow();
 
   // Player Setup
-  Position pos = {5, 3};
-  InputComponent *input = new InputComponent();
-  RenderComponent *render = new RenderComponent('@', COLOR_PAIR(WHITE_BLACK));
-  Entity player(pos);
+  Atlas::Position pos = {5, 3};
+  Atlas::InputComponent *input = new Atlas::InputComponent();
+  Atlas::RenderComponent *render =
+      new Atlas::RenderComponent('@', COLOR_PAIR(WHITE_BLACK));
+  Atlas::Entity player(pos);
   player.addComponent(input);
   player.addComponent(render);
   m_Entities.push_back(player);
 
   // Setup Test Entities
   for (int i = 0; i < 10; i++) {
-    Position pos = {(rand() % 40) + 1, (rand() % 20) + 1};
-    MoveRandomComponent *move = new MoveRandomComponent();
-    RenderComponent *render = new RenderComponent('@', COLOR_PAIR(GREEN_BLACK));
-    Entity entity(pos);
+    Atlas::Position pos = {(rand() % 40) + 1, (rand() % 20) + 1};
+    Atlas::MoveRandomComponent *move = new Atlas::MoveRandomComponent();
+    Atlas::RenderComponent *render =
+        new Atlas::RenderComponent('@', COLOR_PAIR(GREEN_BLACK));
+    Atlas::Entity entity(pos);
     entity.addComponent(move);
     entity.addComponent(render);
     m_Entities.push_back(entity);

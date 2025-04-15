@@ -1,5 +1,7 @@
 #pragma once
 
+namespace Atlas {
+
 class Entity;
 
 // Generic Component class
@@ -30,3 +32,5 @@ class MoveRandomComponent : public Component {
 public:
   virtual void update(Entity &entity) override;
 };
+
+} // namespace Atlas

@@ -1,7 +1,9 @@
 #pragma once
 
-typedef struct _win WINDOW;
-class Entity;
+namespace Atlas {
+
+  typedef struct _win WINDOW;
+  class Entity;
 
 class Renderer {
 public:
@@ -21,3 +23,5 @@ private:
 
   WINDOW *mainWindow;
 };
+
+} // namespace Atlas
